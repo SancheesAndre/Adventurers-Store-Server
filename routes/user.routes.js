@@ -5,6 +5,8 @@ import User from '../models/User.model.js'
 import generateToken from '../config/jwt.config.js';
 import isAuthenticated from '../middlewares/isAuthenticated.js'
 import attachCurrentUser from '../middlewares/attachCurrentUser.js';
+import fileUploader from '../config/cloudinary.config.js'
+
 
 const salt_rounds = process.env.SALT_ROUNDS;
 
@@ -12,14 +14,16 @@ const userRouter = Router()
 
 // Crud (CREATE) - HTTP POST
 // Criar um novo usuário
+
+
+
 userRouter.post("/signup", async (req, res) => {
   // Requisições do tipo POST tem uma propriedade especial chamada body, que carrega a informação enviada pelo cliente
-  console.log(req.body);
+  //console.log(req.file);
 
   try {
     // Recuperar a senha que está vindo do corpo da requisição
     const { password } = req.body;
-
     // Verifica se a senha não está em branco ou se a senha não é complexa o suficiente
     if (
       !password ||
@@ -33,11 +37,15 @@ userRouter.post("/signup", async (req, res) => {
       });
     }
 
+
+
     // Gera o salt
     const salt = bcrypt.genSaltSync(+salt_rounds);
 
     // Criptografa a senha
     const hashedPassword = bcrypt.hashSync(password, salt);
+
+
 
     // Salva os dados de usuário no banco de dados (MongoDB) usando o body da requisição como parâmetro
     const result = await User.create({
@@ -54,6 +62,22 @@ userRouter.post("/signup", async (req, res) => {
   }
 });
 
+userRouter.post("/addPicture", fileUploader.single('profilePicture'), async (req, res) => {
+  try {
+
+    if(!req.file) {
+      return res.status(422).json({message: "The file is mandatory"})
+    }
+
+    return res.status(201).json({fileUrl: req.file.path})
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: "error" });
+  }
+}
+)
+
 // Login
 userRouter.post("/login", async (req, res) => {
   try {
@@ -63,7 +87,7 @@ userRouter.post("/login", async (req, res) => {
     // Pesquisar esse usuário no banco pelo email
     const user = await User.findOne({ email });
 
-    console.log(user);
+    //console.log(user);
 
     // Se o usuário não foi encontrado, significa que ele não é cadastrado
     if (!user) {
@@ -97,6 +121,8 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
+userRouter.delete
+
 // cRud (READ) - HTTP GET
 // Buscar dados do usuário
 userRouter.get("/profile", isAuthenticated, attachCurrentUser, (req, res) => {
@@ -117,5 +143,15 @@ userRouter.get("/profile", isAuthenticated, attachCurrentUser, (req, res) => {
     return res.status(500).json({ msg: JSON.stringify(err) });
   }
 });
+
+userRouter.get("/profiles", async (req, res) => {
+  try {
+    const profiles = await User.find({})
+    return res.status(200).json(profiles)
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ error: 'Internal server error.' })
+  }
+})
 
 export default userRouter;
