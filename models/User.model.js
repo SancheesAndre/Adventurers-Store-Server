@@ -11,7 +11,7 @@ const UserSchema = new Schema({
   staminaPoints: { type: Number, required: true, default: 100 },
   experiencePoints: { type: Number, required: true, default: 0 },
   userMoney: { type: Number, required: true, default: 0 },
-  backpackId: { type: mongoose.Schema.Types.ObjectId, ref: "Backpack" }
+
 });
 
 const User = model("User", UserSchema);

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose
 
-const ItemsSchema = new Schema({
+const ItemSchema = new Schema({
     name: { type: String, required: true, trim: true },
     image: { type: String, required: true },
     type: { type: String, required: true },
@@ -11,6 +11,6 @@ const ItemsSchema = new Schema({
 
 });
 
-const Items = model("Items", ItemsSchema);
+const Item = model("Item", ItemSchema);
 
-export default Items
+export default Item

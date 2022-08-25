@@ -6,6 +6,7 @@ import generateToken from '../config/jwt.config.js';
 import isAuthenticated from '../middlewares/isAuthenticated.js'
 import attachCurrentUser from '../middlewares/attachCurrentUser.js';
 import fileUploader from '../config/cloudinary.config.js'
+import Backpack from '../models/Backpack.model.js';
 
 
 const salt_rounds = process.env.SALT_ROUNDS;
@@ -53,6 +54,10 @@ userRouter.post("/signup", async (req, res) => {
       passwordHash: hashedPassword,
     });
 
+    await Backpack.create({
+      userId: result._id
+    })
+
     // Responder o usuário recém-criado no banco para o cliente (solicitante). O status 201 significa Created
     return res.status(201).json(result);
   } catch (err) {
@@ -65,11 +70,11 @@ userRouter.post("/signup", async (req, res) => {
 userRouter.post("/addPicture", fileUploader.single('profilePicture'), async (req, res) => {
   try {
 
-    if(!req.file) {
-      return res.status(422).json({message: "The file is mandatory"})
+    if (!req.file) {
+      return res.status(422).json({ message: "The file is mandatory" })
     }
 
-    return res.status(201).json({fileUrl: req.file.path})
+    return res.status(201).json({ fileUrl: req.file.path })
 
   } catch (err) {
     console.error(err);
@@ -120,8 +125,6 @@ userRouter.post("/login", async (req, res) => {
     return res.status(500).json({ msg: JSON.stringify(err) });
   }
 });
-
-userRouter.delete
 
 // cRud (READ) - HTTP GET
 // Buscar dados do usuário

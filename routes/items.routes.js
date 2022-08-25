@@ -1,14 +1,14 @@
 import { Router } from 'express'
 import isAuthenticated from '../middlewares/isAuthenticated.js'
 import attachCurrentUser from '../middlewares/attachCurrentUser.js'
-import Items from '../models/Items.model.js'
+import Item from '../models/Item.model.js'
 import Backpack from '../models/Backpack.model.js'
 
 const itemsRouter = Router()
 
 itemsRouter.get("/items", async (req, res) => {
   try {
-    const items = await Items.find({})
+    const items = await Item.find({})
     return res.status(200).json(items)
   } catch (err) {
     console.log(err)
@@ -20,7 +20,7 @@ itemsRouter.get('/items/:id', async (req, res) => {
   try {
     const { id } = req.params
 
-    const Item = await Items.findById(id)
+    const Item = await Item.findById(id)
     return res.status(200).json(Item)
 
   } catch (err) {
@@ -31,7 +31,7 @@ itemsRouter.get('/items/:id', async (req, res) => {
 
 itemsRouter.post('/items', async (req, res) => {
   try {
-    const newItem = await Items.create(req.body)
+    const newItem = await Item.create(req.body)
     return res.status(201).json(newItem)
   } catch (err) {
     console.log(err)
@@ -43,7 +43,7 @@ itemsRouter.delete('/items/:id', async (req, res) => {
   try {
     const { id } = req.params
 
-    await Items.findOneAndDelete(id)
+    await Item.findOneAndDelete(id)
     return res.status(204).json()
 
   } catch (err) {
@@ -61,11 +61,13 @@ itemsRouter.post('/purchase/:id', isAuthenticated, attachCurrentUser, async (req
       return res.status(401).json({ message: "You must be logged to purchase items" })
     }
 
-    await Backpack.create({
-      userId: user._id,
-      itemId: id
+    const item = await Item.findById(id)
+    
+    await Backpack.findOneAndUpdate({ userId: user._id }, {
+      $push: { items: item }
     })
-    return res.status(201).json({ message: "The item has been purchased" })
+
+    return res.status(201).json({ message: "Item has been purchased" })
 
 
   } catch (err) {
@@ -74,17 +76,21 @@ itemsRouter.post('/purchase/:id', isAuthenticated, attachCurrentUser, async (req
   }
 })
 
-itemsRouter.delete('/sell/:id', isAuthenticated, attachCurrentUser, async (req, res) => {
+itemsRouter.post('/sell/:id', isAuthenticated, attachCurrentUser, async (req, res) => {
   try {
     const { id } = req.params
     const user = req.currentUser;
 
     if (!user) {
-      return res.status(401).json({ message: "You must be logged to purchase items" })
+      return res.status(401).json({ message: "You must be logged to sell items" })
     }
 
-    await Backpack.findByIdAndDelete( id )
-    return res.status(201).json({ message: "The item has been sold" })
+    const item = await Item.findById(id)
+    console.log(item._id)
+    
+    await Backpack.findOneAndDelete({ ItemId: item._id })
+
+    return res.status(201).json({ message: "Item has been sold" })
 
 
   } catch (err) {
