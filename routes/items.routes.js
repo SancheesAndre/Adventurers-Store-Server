@@ -62,7 +62,7 @@ itemsRouter.post('/purchase/:id', isAuthenticated, attachCurrentUser, async (req
     }
 
     const item = await Item.findById(id)
-    
+
     await Backpack.findOneAndUpdate({ userId: user._id }, {
       $push: { items: item }
     })
@@ -76,7 +76,7 @@ itemsRouter.post('/purchase/:id', isAuthenticated, attachCurrentUser, async (req
   }
 })
 
-itemsRouter.post('/sell/:id', isAuthenticated, attachCurrentUser, async (req, res) => {
+itemsRouter.put('/sell/:id', isAuthenticated, attachCurrentUser, async (req, res) => {
   try {
     const { id } = req.params
     const user = req.currentUser;
@@ -85,14 +85,17 @@ itemsRouter.post('/sell/:id', isAuthenticated, attachCurrentUser, async (req, re
       return res.status(401).json({ message: "You must be logged to sell items" })
     }
 
-    const item = await Item.findById(id)
-    console.log(item._id)
-    
-    await Backpack.findOneAndDelete({ ItemId: item._id })
+    const userBackpack = await Backpack.findOne({ userId: user._id })
+    const items = userBackpack.items
+    const itemPos = items.indexOf(id)
+
+    items.splice(itemPos, 1)
+
+    await Backpack.findOneAndUpdate({ userId: user._id }, {
+      items
+    })
 
     return res.status(201).json({ message: "Item has been sold" })
-
-
   } catch (err) {
     console.log(err)
     return res.status(500).json({ error: 'Internal server error.' })

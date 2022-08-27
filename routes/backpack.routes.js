@@ -3,10 +3,7 @@ import attachCurrentUser from '../middlewares/attachCurrentUser.js'
 import isAuthenticated from '../middlewares/isAuthenticated.js'
 import Backpack from '../models/Backpack.model.js'
 
-
-
 const backpackRouter = Router()
-
 
 backpackRouter.get("/backpack", isAuthenticated, attachCurrentUser, async (req, res) => {
     try {
