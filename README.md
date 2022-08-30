@@ -1,53 +1,9 @@
-![logo_ironhack_blue 7](https://user-images.githubusercontent.com/23629340/40541063-a07a0a8a-601a-11e8-91b5-2f13e4e6b441.png)
+#### [(clique aqui para ver o projeto)](https://adventurersstore.netlify.app/)
+![image](https://user-images.githubusercontent.com/55901671/187266509-007cc673-12a5-4a98-a26a-e63fef1066ee.png)
 
-# IronREST Boilerplate
+ ![image](https://user-images.githubusercontent.com/55901671/187258762-196888ed-02d3-462b-b8e5-9cce53cd8046.png)
 
-Esse boilerplate para API RESTful já inclui:
+![image](https://user-images.githubusercontent.com/55901671/187259480-d1e45a36-f246-4bae-8007-4c0fcdb5d2ee.png)
+#### [(clique aqui para ver o projeto)](https://adventurersstore.netlify.app/)
 
-- Autenticação por tokens JWT usando o Passport
-- Conexão com banco de dados MongoDB usando Mongoose
-- Servidor Web usando Express pré-configurado com CORS e aceitando requisições JSON e Multipart Form
-- Upload de arquivos usando Cloudinary e Multer
-
-## Para Começar
-
-- Faça o fork e clone deste repositório
-
-## Instalação
-
-```shell
-$ npm install
-```
-
-## Desenvolvimento
-
-Para iniciar o servidor web localmente execute no seu terminal:
-
-```shell
-$ npm run dev
-```
-
-## Deploy do MongoDB
-
-1. Faça login no https://account.mongodb.com/account/login?nds=true
-2. Crie um cluster gratuito
-3. Siga as instruções e obtenha a string de conexão com o banco
-4. Crie uma variável de ambiente MONGODB_URI no Heroku com a string de conexão copiada do Atlas
-
-## Deploy no Heroku
-
-1. Faça login no Heroku e selecione seu repositório
-2. Habilite 'automatic deploys'
-3. No seu terminal, execute os seguintes comandos:
-
-```shell
-$ git add .
-$ git commit -m 'deploying'
-$ heroku git:remote -a nome-do-repo-no-heroku
-$ git push heroku master
-```
-
-4. Adicione uma variável de ambiente no Heroku para cada variável de ambiente presente no arquivo .env (não precisa criar a PORT no Heroku)
-5. Adicione a URL da sua API hospedada no Heroku nas variáveis de ambiente do app React no Netlify
-
-Happy coding! 💙
+![image](https://user-images.githubusercontent.com/55901671/187260490-a40e3a93-ff0e-4e11-8cda-64867a77eb4a.png)
