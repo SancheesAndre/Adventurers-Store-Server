@@ -45,7 +45,7 @@ itemsRouter.delete('/items/:id', async (req, res) => {
   try {
     const { id } = req.params
 
-    await Item.findOneAndDelete(id)
+    await Item.findByIdAndDelete(id)
     return res.status(204).json()
 
   } catch (err) {
