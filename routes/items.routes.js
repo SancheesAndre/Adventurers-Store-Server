@@ -3,7 +3,7 @@ import isAuthenticated from '../middlewares/isAuthenticated.js'
 import attachCurrentUser from '../middlewares/attachCurrentUser.js'
 import Item from '../models/Item.model.js'
 import Backpack from '../models/Backpack.model.js'
-import User from '../models/User.model.js'
+
 
 const itemsRouter = Router()
 
@@ -34,6 +34,7 @@ itemsRouter.post('/items', async (req, res) => {
   try {
     const newItem = await Item.create(req.body)
     return res.status(201).json(newItem)
+
   } catch (err) {
     console.log(err)
     return res.status(500).json({ error: 'Internal server error.' })
@@ -67,9 +68,6 @@ itemsRouter.post('/purchase/:id', isAuthenticated, attachCurrentUser, async (req
     await Backpack.findOneAndUpdate({ userId: user._id }, {
       $push: { items: item }
     })
-
-   
-
 
     return res.status(201).json({ message: "Item has been purchased" })
 

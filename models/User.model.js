@@ -10,7 +10,7 @@ const UserSchema = new Schema({
   healthPoints: { type: Number, required: true, default: 100 },
   staminaPoints: { type: Number, required: true, default: 100 },
   experiencePoints: { type: Number, required: true, default: 0 },
-  userMoney: { type: Number, required: true, default: 100 },
+  userMoney: { type: Number, required: true, default: 500 },
 
 });
 
