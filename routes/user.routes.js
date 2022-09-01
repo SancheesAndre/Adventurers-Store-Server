@@ -164,7 +164,7 @@ userRouter.patch('/purchase/:id', isAuthenticated, attachCurrentUser, async (req
     const user = req.currentUser;
     const item = await Item.findById(id)
 
-    if (user.userMoney > item.price) {
+    if (user.userMoney >= item.price) {
       
     await User.findByIdAndUpdate({_id: user._id}, {
       $set: {userMoney:  user.userMoney - item.price}
