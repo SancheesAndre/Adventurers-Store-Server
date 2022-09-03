@@ -203,4 +203,22 @@ userRouter.patch('/sell/:id', isAuthenticated, attachCurrentUser, async (req, re
   }
 })
 
+userRouter.patch('/addRiddleGold', isAuthenticated, attachCurrentUser, async (req, res) => {
+  try {
+    const user = req.currentUser;
+      
+    await User.findByIdAndUpdate({_id: user._id}, {
+      $set: {userMoney:  user.userMoney + 200}
+    })
+    
+    console.log("Aqui:", user.userMoney)
+
+    return res.status(201).json({ message: "The Riddle was solved!" })
+
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ error: 'Internal server error.' })
+  }
+})
+
 export default userRouter;
